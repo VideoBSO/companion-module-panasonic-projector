@@ -29,6 +29,8 @@ const Constants = {
 	//GridDisplay: 'grid_display',
 	Brightness: 'brightness',
 	LampStatus: 'lamp_state',
+	LensMemory: 'lens_mem',
+	LoadLensMemory: 'load_lens_mem',
 	On: 'on',
 	Off: 'off',
 	Toggle: 'toggle',
@@ -113,6 +115,7 @@ class instance extends instance_skel {
 		this.choiceTestPattern = this.buildList(ntcontrol.TestPattern)
 		this.choiceGridMode = this.buildList(ntcontrol.DisplayGridLines)
 		this.choiceLampState = this.buildList(ntcontrol.LampControlStatus)
+		this.choiceLensMemory = this.buildList(ntcontrol.LensMemory)
 
 		this.choiceOnOff = [
 			{ id: Constants.On, label: Constants.On },
@@ -260,6 +263,19 @@ class instance extends instance_skel {
 					id: Constants.TestPattern,
 					default: ntcontrol.TestPattern.Off,
 					choices: this.choiceTestPattern,
+				},
+			],
+		}
+
+		actions[Constants.LoadLensMemory] = {
+			label: 'Load lens memory',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Lens memory',
+					id: Constants.LensMemory,
+					default: ntcontrol.LensMemory['LENS MEMORY1'],
+					choices: this.choiceLensMemory,
 				},
 			],
 		}
@@ -606,6 +622,9 @@ class instance extends instance_skel {
 					break
 				case Constants.TestPattern:
 					this.sendValue(ntcontrol.TestPatternCommand, opt.test_pattern)
+					break
+				case Constants.LoadLensMemory:
+					this.sendValue(ntcontrol.LensMemoryLoadCommand, opt[Constants.LensMemory])
 					break
 				case Constants.ColorMatchingMode:
 					this.sendValue(ntcontrol.ColorMatchingCommand, opt.mode)
